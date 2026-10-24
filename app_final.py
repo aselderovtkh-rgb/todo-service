@@ -105,3 +105,11 @@ def delete_task(task_id: int):
     del tasks[task_id]
     logger.info("Задача id=%s удалена", task_id)
     return {"deleted": task_id}
+
+
+@app.get("/stats")
+def stats():
+    total = len(tasks)
+    done = sum(1 for t in tasks.values() if t["done"])
+    logger.info("Запрошена статистика: всего=%s, выполнено=%s", total, done)
+    return {"total": total, "done": done, "open": total - done}

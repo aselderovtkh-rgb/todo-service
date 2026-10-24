@@ -59,3 +59,10 @@ def test_complete_task_and_filter():
 def test_empty_title_is_rejected():
     response = client.post("/tasks", json={"title": ""})
     assert response.status_code == 422
+
+
+def test_stats():
+    client.post("/tasks", json={"title": "Первая"})
+    client.post("/tasks", json={"title": "Вторая"})
+    client.post("/tasks/1/done")
+    assert client.get("/stats").json() == {"total": 2, "done": 1, "open": 1}
