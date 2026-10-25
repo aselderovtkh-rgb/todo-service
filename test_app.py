@@ -72,3 +72,10 @@ def test_delete_task():
     client.post("/tasks", json={"title": "Удалить меня"})
     assert client.delete("/tasks/1").status_code == 200
     assert client.get("/tasks/1").status_code == 404
+
+
+def test_task_limit(monkeypatch):
+    monkeypatch.setattr(app_final, "MAX_TASKS", 1)
+    client.post("/tasks", json={"title": "Первая"})
+    response = client.post("/tasks", json={"title": "Вторая"})
+    assert response.status_code == 400
