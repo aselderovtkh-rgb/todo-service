@@ -66,3 +66,9 @@ def test_stats():
     client.post("/tasks", json={"title": "Вторая"})
     client.post("/tasks/1/done")
     assert client.get("/stats").json() == {"total": 2, "done": 1, "open": 1}
+
+
+def test_delete_task():
+    client.post("/tasks", json={"title": "Удалить меня"})
+    assert client.delete("/tasks/1").status_code == 200
+    assert client.get("/tasks/1").status_code == 404
