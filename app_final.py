@@ -113,3 +113,11 @@ def stats():
     done = sum(1 for t in tasks.values() if t["done"])
     logger.info("Запрошена статистика: всего=%s, выполнено=%s", total, done)
     return {"total": total, "done": done, "open": total - done}
+
+
+@app.post("/tasks/{task_id}/undo")
+def reopen_task(task_id: int):
+    task = get_task(task_id)
+    task["done"] = False
+    logger.info("Задача id=%s снова открыта", task_id)
+    return task

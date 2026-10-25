@@ -79,3 +79,10 @@ def test_task_limit(monkeypatch):
     client.post("/tasks", json={"title": "Первая"})
     response = client.post("/tasks", json={"title": "Вторая"})
     assert response.status_code == 400
+
+
+def test_reopen_task():
+    client.post("/tasks", json={"title": "Задача"})
+    client.post("/tasks/1/done")
+    response = client.post("/tasks/1/undo")
+    assert response.json()["done"] is False
